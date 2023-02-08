@@ -1,1 +1,1 @@
-# PsAvalancheConsultig.github.io
+# PsAvalancheConsulting.github.io
