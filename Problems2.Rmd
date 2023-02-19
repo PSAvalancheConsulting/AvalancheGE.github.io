@@ -1,0 +1,47 @@
+--- 
+output: html_document
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+ 
+ 
+```{r code, include=FALSE}
+library(sf)
+library(leaflet.extras)
+library(leaflet.providers)
+library(dplyr)
+
+library(sf) 
+library(dplyr)
+ZonesH <-st_read("Zones_trans/Zones_trans.shp")
+Zones1 <-st_read("Zones_trans1/Zones_trans1.shp") 
+Zones2 <-st_read("Zones_trans2/Zones_trans2.shp")
+##ffa500 Orange 
+##FFFF00 Yellow
+pal <- colorNumeric(c('#ffa500', '#ff0000' , '#ff0000'), domain=ZonesH$value)
+pal2 <- colorNumeric(c('#ff0000', '#ff2e00','#ff6700', '#ff8e00'), domain=Zones2$value) #Considerable - Red - High Alpine 
+pal1 <- colorNumeric(c('#ff0000', '#ff0000', '#ff0000','#ff0000'), domain=Zones1$value) #Moderate - Considerable - Alpine
+
+m <- leaflet()
+m <-addProviderTiles(m, "Esri.WorldTopoMap") %>% 
+  addPolygons(data=Zones1, fillColor = ~pal1(Zones1$value), smoothFactor = 0, weight = 1, opacity = 1, color = "NA", fillOpacity = 0.5) %>%
+  addPolygons(data=Zones2, fillColor = ~pal2(Zones2$value), smoothFactor = 0, weight = 1, opacity = 1, color = "NA", fillOpacity = 0.5) %>%
+  addPolygons(data=ZonesH, fillColor = ~pal(ZonesH$value), smoothFactor = 0, weight = 1, opacity = 1, color = "NA", fillOpacity = 0.5) %>%
+  addLegend("bottomright", colors = c('#ffa500', '#ff0000', '#ff0000'), values= ~values,
+            title = "ზვავსაშიშროების საფეხური / Avalanche Hazard Level",
+            labels = c("3  - მნიშვნელოვანი / Considerable", "4 - მაღალი / High", "4 - მაღალი / High"),
+            opacity = 1
+  ) 
+
+
+
+```
+```{r map, width = 40, height = 30, echo=FALSE}
+m
+```
+
+
